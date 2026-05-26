@@ -1,0 +1,77 @@
+name: publish_baget
+
+on:
+  push:
+    branches: [ "main" ]
+#     tags:
+#       - '*.*.*'   # dispara quando criar uma tag tipo v1.0.0
+#   workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      PROJECT_PATH: ./src/luizdev_solidEdgeST9/luizdev_solidEdgeST9.csproj
+      OUTPUT_DIR: ./artifacts/nupkg
+      VERSION: 1.0.${{ github.run_number }}
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Instalar .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restaurar dependências
+        run: dotnet restore $PROJECT_PATH
+
+      - name: Build
+        run: dotnet build $PROJECT_PATH --configuration Release --no-restore
+
+      - name: Criar package (nupkg)
+        run: |
+          mkdir -p $OUTPUT_DIR
+          dotnet pack $PROJECT_PATH \
+            --configuration Release \
+            --no-build \
+            -p:PackageVersion=${VERSION} \
+            -o $OUTPUT_DIR
+
+      - name: Listar arquivos gerados (debug)
+        run: ls -la $OUTPUT_DIR
+
+      - name: Publicar no BaGet
+        run: |
+          dotnet nuget push "$OUTPUT_DIR/*.nupkg" \
+            --source "https://nuget.luizdev-app.com/v3/index.json" \
+            --api-key "Vde27SSTybhwofLGM49SdA0YhEfNNXlqxtmOabqnlfDOs8sEPg" \
+            --skip-duplicate
+
+      - name: Send email
+        uses: dawidd6/action-send-mail@v3
+        with:
+              server_address: smtp.hostinger.com
+              server_port: 465
+              secure: true
+              username: mail@luizdev-app.com
+              password: Luizdev@#160220
+              subject: "luizdev_solidEdgeST9 - Version : ${{ env.VERSION }}"
+              to: mail@luizdev-app.com
+              from: mail@luizdev-app.com
+              body:  |
+    
+                Deploy foi realizado com sucesso 🚀
+                
+                📦 Versão do package: ${{ env.VERSION }}
+                
+                ✔ Aplicação atualizada
+                ✔ Pipeline executado sem erros
+    
+                Repositório: ${{ github.repository }}
+                Commit: ${{ github.sha }}
+    
+                Att,
+                GitHub Actions      
