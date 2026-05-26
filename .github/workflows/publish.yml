@@ -2,7 +2,7 @@ name: publish_baget
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
 #     tags:
 #       - '*.*.*'   # dispara quando criar uma tag tipo v1.0.0
 #   workflow_dispatch:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      PROJECT_PATH: ./src/luizdev_solidEdgeST9/luizdev_solidEdgeST9.csproj
+      PROJECT_PATH: LuizdevSolidEdgeST9/LuizdevSolidEdgeST9.csproj
       OUTPUT_DIR: ./artifacts/nupkg
       VERSION: 1.0.${{ github.run_number }}
 
@@ -46,7 +46,7 @@ jobs:
       - name: Publicar no BaGet
         run: |
           dotnet nuget push "$OUTPUT_DIR/*.nupkg" \
-            --source "https://nuget.luizdev-app.com/v3/index.json" \
+            --source "https://nuget.luizdevnetcore.com.br/v3/index.json" \
             --api-key "Vde27SSTybhwofLGM49SdA0YhEfNNXlqxtmOabqnlfDOs8sEPg" \
             --skip-duplicate
 
