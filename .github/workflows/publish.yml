@@ -47,7 +47,7 @@ jobs:
         run: |
           dotnet nuget push "$OUTPUT_DIR/*.nupkg" \
             --source "https://nuget.luizdevnetcore.com.br/v3/index.json" \
-            --api-key "Vde27SSTybhwofLGM49SdA0YhEfNNXlqxtmOabqnlfDOs8sEPg" \
+            --api-key "LbUjo6pFxtpzgOcdL5EVuCVZLQxLoPy0" \
             --skip-duplicate
 
       - name: Send email
