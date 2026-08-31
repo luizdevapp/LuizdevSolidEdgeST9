@@ -46,7 +46,7 @@ jobs:
       - name: Publicar no BaGet
         run: |
           dotnet nuget push "$OUTPUT_DIR/*.nupkg" \
-            --source "https://nuget.luizdevnetcore.com.br/v3/index.json" \
+            --source "https://baget.luizdevnetcore.com.br/v3/index.json" \
             --api-key "LbUjo6pFxtpzgOcdL5EVuCVZLQxLoPy0" \
             --skip-duplicate
 
